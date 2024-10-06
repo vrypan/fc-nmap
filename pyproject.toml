@@ -11,7 +11,7 @@ requires-python = ">=3.8"
 license = "MIT"
 keywords = []
 authors = [
-  { name = "Panayotis Vryonis", email = "vrypan@gmail.comm" },
+  { name = "vrypan", email = "vrypan@gmail.comm" },
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -26,12 +26,13 @@ classifiers = [
 ]
 dependencies = [
   "click",
+  "farcaster-py>=0.1.3"
 ]
 
 [project.urls]
-Documentation = "https://github.com/Panayotis Vryonis/fc-nmap#readme"
-Issues = "https://github.com/Panayotis Vryonis/fc-nmap/issues"
-Source = "https://github.com/Panayotis Vryonis/fc-nmap"
+Documentation = "https://github.com/vrypan/fc-nmap#readme"
+Issues = "https://github.com/vrypan/fc-nmap/issues"
+Source = "https://github.com/vrypan/fc-nmap"
 
 [project.scripts]
 fc-nmap = "fc_nmap.cli:fc_nmap"
