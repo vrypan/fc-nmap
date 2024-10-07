@@ -53,4 +53,11 @@ def get_hubs(hub_address, hubs):
 	hub.close()
 	return hubs
 
-#print(hubs)
+def get_hub_info(hub_address):
+	try:
+		hub = HubService(hub_address, use_async=False)
+		info = hub.GetInfo()
+		hub.close()
+		return info
+	except:
+		return None
