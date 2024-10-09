@@ -7,18 +7,34 @@
 
 -----
 
-## Table of Contents
-
-- [Installation](#installation)
-- [License](#license)
-
-## Installation
+## Usage
 
 ```console
 pip install fc-nmap
 
 fc-nmap --help
+
+Usage: fc-nmap [OPTIONS] COMMAND [ARGS]...
+
+  Farcaster Network Mapper
+
+Options:
+  --version   Show the version and exit.
+  -h, --help  Show this message and exit.
+
+Commands:
+  dumpdb    Create a tab separated dump of the database
+  initdb    Initialize the database
+  scan      fc-nmap scan will scann the network starting from [HUB] and...
+  updatedb  Collect addtional information about each hub
 ```
+
+`scan` will start from one hub, get its contact list and ask other hubs for their lists. Based on my tests so far, `hops > 10` will make litte difference.
+Data collected is stored in a local sqlite3 db.
+
+`updatedb` will collect additiona info. 
+
+`dumpdb` generates a text export.
 
 ## License
 

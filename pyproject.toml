@@ -26,7 +26,8 @@ classifiers = [
 ]
 dependencies = [
   "click",
-  "farcaster-py>=0.1.3"
+  "farcaster-py>=0.1.3",
+  "requests"
 ]
 
 [project.urls]
