@@ -33,6 +33,25 @@ def export_countries(dbpath="hubs.db", out='-', max_age=60*60*24):
     for r in records:
         click.echo(f'{r[0]}\t{r[1]}\t{r[2]}', file=file_h)
 
+def export_fids(dbpath="hubs.db", out='-', max_age=60*60*24):
+    conn = sqlite3.connect(dbpath)
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT hub_info.fid, count(*) AS C
+        FROM hub LEFT JOIN hub_info
+        ON hub.ip = hub_info.ip AND hub.port = hub_info.port
+        WHERE hub.ts > unixepoch()*1000 - ?
+        GROUP BY hub_info.fid
+        ORDER BY C DESC
+        """, (max_age*1000,))
+
+    records = cursor.fetchall()
+    file_h = click.open_file(out, 'w')
+    for r in records:
+        click.echo(f'{r[0]}\t{r[1]}', file=file_h)
+
+
 if __name__ == "__main__":
     export_full()
     export_countries()
+    export_fids()
