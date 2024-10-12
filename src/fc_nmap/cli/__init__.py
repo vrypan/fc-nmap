@@ -46,7 +46,6 @@ def scan(hub, hops):
         ) as bar:
         bar.update(1, hub)
         hubs = get_hubs(hub,{})
-        print(hubs)
         if not hubs:
             click.echo(f'Unable to contact {hub}')
             sys.exit(1)
