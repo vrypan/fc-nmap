@@ -47,7 +47,7 @@ def get_hubs(hub_address, hubs):
 def _get_hub_info(address, port, use_ssl=False, timeout=5):
 	try:
 		hub = HubService(f'{address}:{port}', use_async=False, timeout=timeout, use_ssl=use_ssl)
-		info = hub.GetInfo(timeout=timeout)
+		info = hub.GetInfo(db_stats=True, timeout=timeout)
 		hub.close()
 		return (None, info)
 	except RpcError as e:

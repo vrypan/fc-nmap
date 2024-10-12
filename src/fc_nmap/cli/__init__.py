@@ -9,7 +9,7 @@ import sys
 
 from fc_nmap.__about__ import __version__
 from fc_nmap.get_hubs import get_hub_info, get_hubs
-from fc_nmap.dbexports import export_full, export_countries, export_fids
+from fc_nmap import dbexports
 from fc_nmap.ip2location import resolve_ip
 
 @click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=True)
@@ -63,11 +63,12 @@ def scan(hub, hops):
         h_dnsname   = hubs[h]['dns_name']
         h_ts        = hubs[h]['timestamp']
         db_cursor.execute("""
-            INSERT OR REPLACE INTO hub (ip, port, dnsname, proto_version, app_version, ts) VALUES (?,?,?,?,?,?)
+            INSERT OR REPLACE INTO hub (ip, port, dnsname, proto_version, app_version, ts) VALUES (?,?,?,?,?,datetime(?/1000, 'unixepoch'))
             """, 
             (h_ip, h_port, h_dnsname, h_proto_ver, h_app_ver, h_ts)
         )
         # click.echo(f'{h}\t{hubs[h]['appv']}\t{datetime.fromtimestamp(int(hubs[h]['timestamp']/1000), tz=None)}', file=out)
+    db_cursor.execute("""INSERT OR REPLACE INTO kv VALUES ('LAST_SCAN', unixepoch('now'))""")
     db_conn.commit()
     click.echo('Database updated.')
     
@@ -97,11 +98,15 @@ def update_hub_info(output, age_threshold, timeout):
     # r_cursor = conn.cursor()
     # w_cursor = conn.cursor()
     cursor = conn.cursor()
+    
+    cursor.execute("""SELECT v FROM kv WHERE k='LAST_SCAN' """)
+    last_scan = cursor.fetchone()[0]
+
     cursor.execute("""
         SELECT COUNT(*) FROM hub LEFT JOIN hub_info
         ON hub.ip = hub_info.ip AND hub.port = hub_info.port 
-        WHERE hub.ts > datetime() - ?
-        AND ( unixepoch() - unixepoch(hub_info.updated_at) > ?
+        WHERE unixepoch(hub.ts) > unixepoch('now') - ? -- hub was active in the last N seconds
+        AND ( unixepoch(hub_info.updated_at) < unixepoch('now') -  ? -- hub info was not updated in the last N seconds
         OR hub_info.updated_at IS NULL )
         """, (age_threshold, age_threshold,))
     count = cursor.fetchone()[0]
@@ -110,10 +115,10 @@ def update_hub_info(output, age_threshold, timeout):
     cursor.execute("""
         SELECT hub.ip, hub.port, hub.dnsname FROM hub LEFT JOIN hub_info
         ON hub.ip = hub_info.ip AND hub.port = hub_info.port 
-        WHERE hub.ts > datetime() - ?
-        AND ( unixepoch() - unixepoch(hub_info.updated_at) > ?
+        WHERE unixepoch(hub.ts) > unixepoch('now') - ? -- hub was active in the last N seconds
+        AND ( unixepoch(hub_info.updated_at) < unixepoch('now') -  ? -- hub info was not updated in the last N seconds
         OR hub_info.updated_at IS NULL )
-        """, (age_threshold, age_threshold,))
+        """, (age_threshold, age_threshold))
     records = cursor.fetchall()
 
     i = 0
@@ -131,7 +136,9 @@ def update_hub_info(output, age_threshold, timeout):
             if info:
                 cursor.execute(
                     """
-                    INSERT OR REPLACE INTO hub_info (ip, port, version, is_syncing, nickname, root_hash, peerid, fid, updated_at) VALUES (?,?,?,?,?,?,?,?,unixepoch())
+                    INSERT OR REPLACE INTO hub_info 
+                    (ip, port, version, is_syncing, nickname, root_hash, peerid, fid, num_messages, num_fid_events, num_fname_events, approx_size, updated_at) 
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,datetime())
                     """,
                     (r[0],r[1], #ip:port
                     info.version,
@@ -139,7 +146,12 @@ def update_hub_info(output, age_threshold, timeout):
                     info.nickname,
                     info.root_hash,
                     info.peerId,
-                    info.hub_operator_fid)
+                    info.hub_operator_fid,
+                    info.db_stats.num_messages,
+                    info.db_stats.num_fid_events,
+                    info.db_stats.num_fname_events,
+                    info.db_stats.approx_size
+                    )
                     )
                 line = f"{r[0]}:{r[1]} -- {info.hub_operator_fid}"
             else:
@@ -161,7 +173,7 @@ def update_hub_geo(geo_api_key):
     cursor.execute("""
         SELECT COUNT(*) FROM hub LEFT JOIN addr
         ON hub.ip = addr.ip
-        WHERE unixepoch() - unixepoch(addr.updated_at) > ?
+        WHERE unixepoch('now') - unixepoch(addr.updated_at) > ?
         OR addr.updated_at IS NULL
         """, (60*60*24*100,))
     count = cursor.fetchone()[0]
@@ -170,7 +182,7 @@ def update_hub_geo(geo_api_key):
     cursor.execute("""
         SELECT hub.ip FROM hub LEFT JOIN addr
         ON hub.ip = addr.ip
-        WHERE unixepoch() - unixepoch(addr.updated_at) > ?
+        WHERE unixepoch('now') - unixepoch(addr.updated_at) > ?
         OR addr.updated_at IS NULL
         """, (60*60*24*100,))
     records = cursor.fetchall()
@@ -190,7 +202,7 @@ def update_hub_geo(geo_api_key):
             if info:
                 cursor.execute(
                     """
-                    INSERT OR REPLACE INTO addr VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
+                    INSERT OR REPLACE INTO addr VALUES (?,?,?,?,?,?,?,?,?,?,?,?,datetime())
                     """,(
                         info['ip'],
                         info['country_code'], 
@@ -203,8 +215,7 @@ def update_hub_geo(geo_api_key):
                         info['time_zone'],
                         info['asn'],
                         info['as'],
-                        info['is_proxy'],
-                        None
+                        info['is_proxy']
                     )
                 )
                 conn.commit()
@@ -220,8 +231,13 @@ def initdb():
     conn = sqlite3.connect('hubs.db')
     cursor = conn.cursor()
     cursor.execute("""
+        CREATE TABLE IF NOT EXISTS kv
+        ( k TEXT NOT NULL PRIMARY KEY, v INTEGER )
+        
+    """)
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS hub
-        ( ip text, port integer, dnsname TEXT, proto_version text, app_version text, ts timestamp, 
+        ( ip text, port integer, dnsname TEXT, proto_version text, app_version text, ts TEXT, 
             PRIMARY KEY(ip,port)
         )
         
@@ -238,6 +254,10 @@ def initdb():
             root_hash TEXT, 
             peerid TEXT, 
             fid INTEGER, 
+            num_messages INTEGER, 
+            num_fid_events INTEGER, 
+            num_fname_events INTEGER, 
+            approx_size INTEGER,
             updated_at TEXT NOT NULL DEFAULT current_timestamp,
             PRIMARY KEY(ip,port)
         )
@@ -266,14 +286,18 @@ def initdb():
 @fc_nmap.command()
 @click.option('--out', default='-', help="Output file, leave empty for stdout")
 @click.option('--max-age', default=86400, help="Only check records that were created/updated in the last INTEGER seconds.", show_default=True)
-@click.option('--report', type=click.Choice(['all', 'countries', 'fids'], case_sensitive=False))
+@click.option('--report', type=click.Choice(['all', 'countries', 'fids', 'app', 'asn'], case_sensitive=False))
 def export(out, max_age, report):
     """Create a tab separated dump of the database"""
     if report == 'all':
-        export_full(dbpath='hubs.db', out=out, max_age=max_age)
+        dbexports.export_full(dbpath='hubs.db', out=out, max_age=max_age)
     if report == 'countries':
-        export_countries(dbpath='hubs.db', out=out, max_age=max_age)
+        dbexports.export_countries(dbpath='hubs.db', out=out, max_age=max_age)
     if report == 'fids':
-        export_fids(dbpath='hubs.db', out=out, max_age=max_age)
+        dbexports.export_fids(dbpath='hubs.db', out=out, max_age=max_age)
+    if report == 'app':
+        dbexports.export_app_version(dbpath='hubs.db', out=out, max_age=max_age)
+    if report == 'asn':
+        dbexports.export_asn(dbpath='hubs.db', out=out, max_age=max_age)
     
     

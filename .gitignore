@@ -1,5 +1,7 @@
 # Byte-compiled / optimized / DLL files
 .DS_Store
+src/fc_nmap/schemas/
+tmp/
 __pycache__/
 *.py[cod]
 *$py.class
