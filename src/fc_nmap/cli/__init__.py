@@ -24,8 +24,7 @@ def fc_nmap():
 @click.option('--hops', default=10, help='Number of hubs to query.')
 # @click.option('--out', default='-', type=click.File('w'), help="Output file, leave empty for stdout")
 def scan(hub, hops):
-    """fc-nmap scan will scann the network starting from [HUB] and collect hub IPs, versions and last
-    update timestamp.
+    """Scan the network
     """
     try:
         db_conn = sqlite3.connect('hubs.db')

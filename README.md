@@ -23,9 +23,9 @@ Options:
   -h, --help  Show this message and exit.
 
 Commands:
-  dumpdb    Create a tab separated dump of the database
+  exportdb  Create a tab separated dump of the database
   initdb    Initialize the database
-  scan      fc-nmap scan will scann the network starting from [HUB] and...
+  scan      Scan will scan the network
   updatedb  Collect addtional information about each hub
 ```
 
