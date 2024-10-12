@@ -13,3 +13,7 @@ def test_kets():
 def test_local():
     ret = get_hubs.get_hub_info('10.0.0.1', 2283, '')
     assert ret == None
+
+def test_without_ip():
+    hubs = get_hubs.get_hubs('hoyt.farcaster.xyz:2283',{})
+    assert len(hubs) > 0

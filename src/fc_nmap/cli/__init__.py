@@ -20,8 +20,8 @@ def fc_nmap():
     pass
 
 @fc_nmap.command()
-@click.option('--hub', default='', help='IP:port of hub to start crawling from.')
-@click.option('--hops', default=20, help='Number of hubs to query.')
+@click.option('--hub', default='hoyt.farcaster.xyz:2283', help='IP:port of hub to start crawling from.')
+@click.option('--hops', default=10, help='Number of hubs to query.')
 # @click.option('--out', default='-', type=click.File('w'), help="Output file, leave empty for stdout")
 def scan(hub, hops):
     """fc-nmap scan will scann the network starting from [HUB] and collect hub IPs, versions and last
@@ -44,11 +44,19 @@ def scan(hub, hops):
             fill_char='#',
             item_show_func=lambda a: a.rjust(21) if a else None
         ) as bar:
-        for i in range(hops):
+        bar.update(1, hub)
+        hubs = get_hubs(hub,{})
+        print(hubs)
+        if not hubs:
+            click.echo(f'Unable to contact {hub}')
+            sys.exit(1)
+        for i in range(hops-1):
             bar.update(1, hub)
-            hubs = get_hubs(hub, hubs)
             hub = random.choice(list(hubs.keys()))
+            hubs = get_hubs(hub,hubs)
+            
         bar.update(1,'Done.')
+    click.echo(f'Hubs found: {len(hubs)}')
     for h in hubs:
         h_ip,h_port = h.split(':')
         h_app_ver   = hubs[h]['appv']
@@ -62,13 +70,14 @@ def scan(hub, hops):
         )
         # click.echo(f'{h}\t{hubs[h]['appv']}\t{datetime.fromtimestamp(int(hubs[h]['timestamp']/1000), tz=None)}', file=out)
     db_conn.commit()
-    click.echo(f'Total hubs: {len(hubs)}')
+    click.echo('Database updated.')
+    
 
 @fc_nmap.command()
 @click.argument('output', default='-', type=click.File('w'))
 @click.option('--hub-info', is_flag=True, help="Collect hub info for hubs")
 @click.option('--hub-location', is_flag=True, help="Look up hubs geolocation")
-@click.option('--geo-api-key', help="API key to be used for IP-to-geolocation service", show_default=True)
+@click.option('--geo-api-key', help="API key to be used for IP-to-geolocation service", show_default=True, envvar='FCNMAP_GEO_API_KEY')
 @click.option('--age-threshold', default=86400, help="Only check records no older than INTEGER.", show_default=True)
 @click.option('--timeout', default=5, help='Seconds to wait before gRPC timeout.')
 def updatedb(output, age_threshold, hub_info, hub_location, geo_api_key, timeout):
@@ -259,7 +268,7 @@ def initdb():
 @click.option('--out', default='-', help="Output file, leave empty for stdout")
 @click.option('--max-age', default=86400, help="Only check records that were created/updated in the last INTEGER seconds.", show_default=True)
 @click.option('--report', type=click.Choice(['all', 'countries', 'fids'], case_sensitive=False))
-def dumpdb(out, max_age, report):
+def export(out, max_age, report):
     """Create a tab separated dump of the database"""
     if report == 'all':
         export_full(dbpath='hubs.db', out=out, max_age=max_age)

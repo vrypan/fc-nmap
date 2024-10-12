@@ -6,32 +6,41 @@ import time, datetime, random
 
 from ipaddress import ip_address 
 
+
+def _get_peers(hub_address):
+	try:
+		hub = HubService(hub_address, use_async=False, timeout=5)
+		peers = hub.GetCurrentPeers()
+		hub.close()
+		return peers
+	except RpcError as error:
+		if error.code() == StatusCode.UNAVAILABLE:
+			try:
+				hub = HubService(hub_address, use_async=False, timeout=5, use_ssl=True)
+				peers = hub.GetCurrentPeers()
+				hub.close()
+				return peers
+			except:
+				return None
+		return None
+
 def get_hubs(hub_address, hubs):
 	if not hub_address:
 		print("No hub address. Check .env.sample")
 		sys.exit(1)
-	peers = None
-	while not peers:
-		try:
-			hub = HubService(hub_address, use_async=False, timeout=5)
-			peers = hub.GetCurrentPeers()
-		except RpcError:
-			hub_address = random.choice(list(hubs.keys()))
-			time.sleep(1)
-
-	
+	peers = _get_peers(hub_address)
+	if not peers:
+		return hubs
 	for c in peers.contacts:
-		if c.rpc_address.address != '127.0.0.1':
-			id = f'{c.rpc_address.address}:{c.rpc_address.port}'
-			if id not in hubs or hubs[id]['timestamp'] < c.timestamp:
-				hubs[id] = {
-					'family': c.rpc_address.family,
-					'dns_name': c.rpc_address.dns_name,
-					'hubv': c.hub_version,
-					'appv': c.app_version,
-					'timestamp': c.timestamp
-					}
-	hub.close()
+		id = f'{c.rpc_address.address}:{c.rpc_address.port}'
+		if id not in hubs or hubs[id]['timestamp'] < c.timestamp:
+			hubs[id] = {
+				'family': c.rpc_address.family,
+				'dns_name': c.rpc_address.dns_name,
+				'hubv': c.hub_version,
+				'appv': c.app_version,
+				'timestamp': c.timestamp
+				}
 	return hubs
 
 
@@ -56,9 +65,8 @@ def get_hub_info(address, port, dnsname, timeout=5):
 			if not error:
 				return info
 			else:
-				print(address, port, dnsname, error.code(), error.details())
+				#print(address, port, dnsname, error.code(), error.details())
 				return None
-				#sys.exit(1)
 		else:
 			return 
 	else:
