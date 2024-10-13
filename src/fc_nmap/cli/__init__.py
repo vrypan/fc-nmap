@@ -9,7 +9,7 @@ import sys
 
 from fc_nmap.__about__ import __version__
 from fc_nmap.get_hubs import get_hub_info, get_hubs
-from fc_nmap import dbexports
+from fc_nmap import dbexports, dbexports_maps
 from fc_nmap.ip2location import resolve_ip
 
 @click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=True)
@@ -285,7 +285,7 @@ def initdb():
 @fc_nmap.command()
 @click.option('--out', default='-', help="Output file, leave empty for stdout")
 @click.option('--max-age', default=86400, help="Only check records that were created/updated in the last INTEGER seconds.", show_default=True)
-@click.option('--report', type=click.Choice(['all', 'countries', 'fids', 'app', 'asn'], case_sensitive=False))
+@click.option('--report', type=click.Choice(['all', 'countries', 'fids', 'app', 'asn', 'geoip', 'map'], case_sensitive=False))
 def export(out, max_age, report):
     """Create a tab separated dump of the database"""
     if report == 'all':
@@ -298,5 +298,16 @@ def export(out, max_age, report):
         dbexports.export_app_version(dbpath='hubs.db', out=out, max_age=max_age)
     if report == 'asn':
         dbexports.export_asn(dbpath='hubs.db', out=out, max_age=max_age)
+    if report == 'geoip':
+        dbexports.export_latlong(dbpath='hubs.db', out=out, max_age=max_age)
+    if report == 'pam':
+        dbexports_maps.map(dbpath='hubs.db', out=out, max_age=max_age)
+    
+
+@fc_nmap.command()
+@click.option('--out', default='fc_nmap.html', help="Output file")
+@click.option('--max-age', default=86400, help="Only check records that were created/updated in the last INTEGER seconds.", show_default=True)
+def map(out, max_age):
+    dbexports_maps.create_map(dbpath='hubs.db', out=out, max_age=max_age)
     
     

@@ -82,6 +82,21 @@ def export_app_version(dbpath="hubs.db", out='-', max_age=60*60*24):
     for r in records:
         click.echo(f'{r[0]}\t{r[1]}', file=file_h)
 
+def export_latlong(dbpath="hubs.db", out='-', max_age=60*60*24):
+    """Export IP, port, lat, long"""
+    conn = sqlite3.connect(dbpath)
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT count(*), addr.latitude, addr.longitude, addr.country_code, addr.zip_code
+        FROM hub LEFT JOIN hub_info ,addr
+        ON hub.ip = hub_info.ip AND hub.port = hub_info.port AND hub.ip = addr.ip
+        WHERE unixepoch(hub.ts) > unixepoch() - ?
+        GROUP BY latitude, longitude
+        """, (max_age,))
+    records = cursor.fetchall()
+    with click.open_file(out, 'w') as file_h:
+        for r in records:
+            click.echo(f'{r[0]}\t{r[1]}\t{r[2]}\t{r[3]}\t{r[4]}', file=file_h)
 
 
 if __name__ == "__main__":
