@@ -7,6 +7,8 @@
 
 -----
 
+![world map of hubs](map.png)
+
 ## Quickstart
 
 ```console
@@ -27,14 +29,8 @@ Commands:
   initdb    Initialize the database
   scan      Scan will scan the network
   updatedb  Collect addtional information about each hub
+  map       Create a mpa of the hubs in db
 ```
-
-`scan` will start from one hub, get its contact list and ask other hubs for their lists. Based on my tests so far, `hops > 10` will make litte difference.
-Data collected is stored in a local sqlite3 db.
-
-`updatedb` will collect additiona info. 
-
-`dumpdb` generates a text export.
 
 ## Behind the scenes
 
