@@ -22,8 +22,9 @@ def fc_nmap():
 @fc_nmap.command()
 @click.option('--hub', default='hoyt.farcaster.xyz:2283', help='IP:port of hub to start crawling from.')
 @click.option('--hops', default=10, help='Number of hubs to query.')
+@click.option('--keep-stats', is_flag=True, help="Store scan stats in db.", envvar='FCNMAP_KEEP_STATS')
 # @click.option('--out', default='-', type=click.File('w'), help="Output file, leave empty for stdout")
-def scan(hub, hops):
+def scan(hub, hops, keep_stats):
     """Scan the network
     """
     try:
@@ -68,6 +69,8 @@ def scan(hub, hops):
         )
         # click.echo(f'{h}\t{hubs[h]['appv']}\t{datetime.fromtimestamp(int(hubs[h]['timestamp']/1000), tz=None)}', file=out)
     db_cursor.execute("""INSERT OR REPLACE INTO kv VALUES ('LAST_SCAN', unixepoch('now'))""")
+    db_cursor.execute("""INSERT INTO scan_stats (hubs) VALUES (?)""", (len(hubs),))
+
     db_conn.commit()
     click.echo('Database updated.')
     
@@ -229,24 +232,27 @@ def initdb():
     """Initialize the database"""
     conn = sqlite3.connect('hubs.db')
     cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS kv
-        ( k TEXT NOT NULL PRIMARY KEY, v INTEGER )
-        
-    """)
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS hub
-        ( ip text, port integer, dnsname TEXT, proto_version text, app_version text, ts TEXT, 
+    cursor.executescript("""
+        CREATE TABLE IF NOT EXISTS kv( 
+            k TEXT NOT NULL PRIMARY KEY, 
+            v INTEGER
+        );
+
+        CREATE TABLE IF NOT EXISTS hub( 
+            ip TEXT, 
+            port INTEGER, 
+            dnsname TEXT, 
+            proto_version TEXT, 
+            app_version TEXT, 
+            ts TEXT, 
             PRIMARY KEY(ip,port)
-        )
-        
-    """)
-    cursor.execute("""
-        CREATE INDEX IF NOT EXISTS idx_hub_ip ON hub(ip)
-    """)
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS hub_info
-        ( ip text, port INTEGER, 
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_hub_ip ON hub(ip);
+
+        CREATE TABLE IF NOT EXISTS hub_info( 
+            ip TEXT, 
+            port INTEGER, 
             version TEXT, 
             is_syncing BOOL, 
             nickname TEXT, 
@@ -259,10 +265,8 @@ def initdb():
             approx_size INTEGER,
             updated_at TEXT NOT NULL DEFAULT current_timestamp,
             PRIMARY KEY(ip,port)
-        )
-    """)
-    
-    cursor.execute("""
+        );
+
         CREATE TABLE IF NOT EXISTS addr (
             ip text NOT NULL PRIMARY KEY, 
             country_code TEXT, 
@@ -277,7 +281,13 @@ def initdb():
             as_name TEXT,
             is_proxy BOOL,
             updated_at TEXT NOT NULL DEFAULT current_timestamp
-        )
+        );
+
+        CREATE TABLE IF NOT EXISTS scan_stats (
+            ts TEXT NOT NULL DEFAULT current_timestamp,
+            hubs INTEGER DEFAULT 0
+        );
+
     """)
     conn.commit()
     click.echo("hubs.db created.")
