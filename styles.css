@@ -21,7 +21,7 @@ body {
 }
 
 img {
-    width: 90%;
+    max-width: 90%;
 }
 main {
     background-color: var(--background-color);

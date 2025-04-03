@@ -13,17 +13,22 @@
         import { sdk } from 'https://esm.sh/@farcaster/frame-sdk'
         
         // Call ready when the page is loaded
+        async function rewriteLinks() {
+            const links = document.querySelectorAll("a[href^='http']");
+            for (let link of links) {
+                link.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    frame.sdk.actions.openUrl(link.getAttribute("href"));
+                });
+            }
+        }
         window.addEventListener('load', async () => {
             try {
                 await sdk.actions.ready();
                 console.log('Frame is ready');
-                const links = document.querySelectorAll("a[href^='http']");
-                for (let link of links) {
-                    link.addEventListener("click", (event) => {
-                    event.preventDefault();
-                    frame.sdk.actions.openUrl(link.getAttribute("href"));
-                    });
-                }
+                const ctx = await frame.sdk.context;
+                ctx ? await rewriteLinks() : null;
+                
             } catch (e) {
                 console.error('Failed to initialize frame:', e);
             }
@@ -38,7 +43,7 @@
 <p><a href="https://pypi.org/project/fc-nmap"><img src="https://img.shields.io/pypi/v/fc-nmap.svg" alt="PyPI - Version"></a>
 <a href="https://pypi.org/project/fc-nmap"><img src="https://img.shields.io/pypi/pyversions/fc-nmap.svg" alt="PyPI - Python Version"></a></p>
 <hr>
-<p><img src="map.png" alt="world map of hubs"></p>
+<p><img src="https://raw.githubusercontent.com/vrypan/fc-nmap/main/map.png" alt="world map of hubs"></p>
 <h2>Quickstart</h2>
 <pre><code class="language-console">pip install fc-nmap
 
