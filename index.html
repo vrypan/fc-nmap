@@ -25,7 +25,7 @@
             for (let link of links) {
                 link.addEventListener("click", (event) => {
                     event.preventDefault();
-                    frame.sdk.actions.openUrl(link.getAttribute("href"));
+                    sdk.actions.openUrl(link.getAttribute("href"));
                 });
             }
         }
@@ -33,7 +33,7 @@
             try {
                 await sdk.actions.ready();
                 console.log('Frame is ready');
-                const ctx = await frame.sdk.context;
+                const ctx = await sdk.context;
                 ctx ? await rewriteLinks() : null;
                 
             } catch (e) {
