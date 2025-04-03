@@ -9,6 +9,6 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-      - uses: vrypan/gh-frame@v1.0.13
+      - uses: vrypan/gh-frame@v1.0.14
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
