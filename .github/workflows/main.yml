@@ -1,0 +1,10 @@
+            - name: Farcaster-friendly Repo Page
+  # You may pin to the exact commit or the version.
+  # uses: vrypan/gh-frame@f08fe6f92741dc3e524a95cd9ed449d4f65022cd
+  uses: vrypan/gh-frame@latest
+  with:
+    # GitHub token for repository access
+    token: # default is 
+    # Custom domain for GitHub Pages (optional)
+    cname: # optional, default is 
+          
