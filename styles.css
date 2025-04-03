@@ -20,9 +20,6 @@ body {
     padding: 0.5rem;
 }
 
-img {
-    max-width: 90%;
-}
 main {
     background-color: var(--background-color);
     border: 1px solid var(--border-color);
@@ -118,7 +115,9 @@ footer {
     .container {
         padding: 0.25rem;
     }
-    
+    img {
+        max-width: 90%;
+    }
     main {
         padding: 0.75rem;
         border-radius: 0;
