@@ -95,137 +95,49 @@
     </style>
 </head>
 <body>
-    <h1>gh-frame</h1>
-<p>A GitHub Action that creates a Farcaster-friendly static page from your README.md with automatic frame support.</p>
-<h2>Features</h2>
-<ul>
-<li>Converts your README.md to a beautiful static page</li>
-<li>Automatically generates Open Graph images for social sharing</li>
-<li>Creates a Farcaster frame mini-app for your repository</li>
-<li>Supports custom domain names</li>
-<li>Rewrites relative image links to use raw.githubusercontent.com URLs</li>
-<li>Mobile-friendly design</li>
-<li>Dark mode support</li>
-</ul>
-<h2>Usage</h2>
-<ol>
-<li>Create a new workflow file in your repository at <code>.github/workflows/gh-frame.yml</code>:</li>
-</ol>
-<div class="codehilite"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build Farcaster Page</span>
-<span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">push</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">workflow_dispatch</span><span class="p p-Indicator">]</span>
-<span class="nt">jobs</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">build</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
-<span class="w">    </span><span class="nt">permissions</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
-<span class="w">      </span><span class="nt">pages</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
-<span class="w">      </span><span class="nt">id-token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
-<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vrypan/gh-frame@v1.1.10</span>
-<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.GITHUB_TOKEN }}</span>
+    <h1>fc-nmap</h1>
+<p><strong>THis software is still in alpha and under heavy development.</strong> Things will change and break.</p>
+<p><a href="https://pypi.org/project/fc-nmap"><img alt="PyPI - Version" src="https://img.shields.io/pypi/v/fc-nmap.svg" /></a>
+<a href="https://pypi.org/project/fc-nmap"><img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/fc-nmap.svg" /></a></p>
+<hr />
+<p><img alt="world map of hubs" src="https://raw.githubusercontent.com/vrypan/fc-nmap/gh-frame/map.png" /></p>
+<h2>Quickstart</h2>
+<div class="codehilite"><pre><span></span><code><span class="go">pip install fc-nmap</span>
+
+<span class="go">fc-nmap --help</span>
+
+<span class="go">Usage: fc-nmap [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">  Farcaster Network Mapper</span>
+
+<span class="go">Options:</span>
+<span class="go">  --version   Show the version and exit.</span>
+<span class="go">  -h, --help  Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  exportdb  Create a tab separated dump of the database</span>
+<span class="go">  initdb    Initialize the database</span>
+<span class="go">  scan      Scan will scan the network</span>
+<span class="go">  updatedb  Collect addtional information about each hub</span>
+<span class="go">  map       Create a mpa of the hubs in db</span>
 </code></pre></div>
 
-<ol>
-<li>Go to your repository's Settings &gt; Pages and:</li>
-<li>Select the <code>gh-frame</code> branch as the source</li>
-<li>Click Save</li>
-</ol>
-<p>Your page will be available at:
-- <code>https://&lt;username&gt;.github.io/&lt;repository&gt;</code>
-- Or at your custom domain if configured</p>
-<h2>Frame Mini-App</h2>
-<p>The generated page includes a Farcaster frame mini-app that allows users to:
-- View your repository directly in Farcaster
-- Interact with links in your README
-- Share your repository in Farcaster feeds</p>
-<p>The frame includes:
-- A custom splash screen with your repository's image
-- A button to open the repository
-- Automatic link handling for external URLs</p>
-<h2>Customization</h2>
-<h3>Images</h3>
-<p>The action automatically generates two images:
-- <code>og-image.png</code>: Used for social sharing and the frame
-- <code>splash-image.png</code>: Used for the frame splash screen</p>
-<p>You can customize these images by:
-1. Creating a <code>generate-images.sh</code> script in your repository
-2. The script should generate both images in the current directory</p>
-<h3>Styling</h3>
-<p>The page uses a clean, modern design with:
-- Responsive layout
-- Dark mode support
-- GitHub-like styling
-- Custom fonts and colors</p>
-<h2>Development</h2>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Install dependencies</span>
-npm<span class="w"> </span>install
-
-<span class="c1"># Build the action</span>
-npm<span class="w"> </span>run<span class="w"> </span>build
-
-<span class="c1"># Test locally</span>
-npm<span class="w"> </span><span class="nb">test</span>
-</code></pre></div>
-
+<h2>Behind the scenes</h2>
+<p><code>fc-nmap initdb</code> creates a local sqlite database where data is stored.</p>
+<p><code>fc-nmap scan</code> will start by asking a hub to provide its contact list (gRPC call <code>GetCurrentPeers</code>). Using this list, it will pick <code>--hops</code>
+hubs at random, and request their contact list too. The lists are combined and stored in the database.</p>
+<p><code>fc-nmap updatedb --hub-info</code> looks into the database and picks hubs that were recently active.
+(Recency is defined by comparing <code>ContactInfoContentBody.timestamp</code> collected when requesting the contacts lists and the current timestamp.)
+The command will try to connect to each one of the hubs, and collect additional info using <code>GetInfo</code>, and store the results in the local
+database.</p>
+<p><code>fc-nmap updatedb --hub-location</code> works similar to <code>--hub-info</code>, but uses ip2location.io to get location information about each hub IP.
+Again, information collected is stored in the local database. The script will not query ip2location for IPs that were looked up in the last
+100 days. This helps staying within ip2location free plan limits.</p>
+<p><code>fc-nmap export --report=all</code> will export all "active" hubs. Use fc-nmap export --help` to get all the available exports/reports.
+Or connect directly to the local database (currently named hubs.db and stored in the directory where you called the previous commands)
+and run your own queries.</p>
 <h2>License</h2>
-<p>MIT</p>
-<h1>Test GFM Features</h1>
-<h2>Code Blocks</h2>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">hello_world</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello, World!&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<h2>Tables</h2>
-<p>| Feature | Support |
-|---------|---------|
-| Tables  | ✅      |
-| Code    | ✅      |
-| Lists   | ✅      |</p>
-<h2>Lists</h2>
-<ul>
-<li>Item 1</li>
-<li>Item 2</li>
-<li>Subitem 2.1</li>
-<li>
-<p>Subitem 2.2</p>
-</li>
-<li>
-<p>Numbered item 1</p>
-</li>
-<li>Numbered item 2</li>
-</ul>
-<h2>Task Lists</h2>
-<ul>
-<li>[x] Task 1</li>
-<li>[ ] Task 2</li>
-<li>[ ] Task 3</li>
-</ul>
-<h2>Strikethrough</h2>
-<p>~~This text is strikethrough~~</p>
-<h2>Emoji</h2>
-<p>:smile: :rocket: :tada:</p>
-<h2>Links</h2>
-<p><a href="https://github.com">GitHub</a></p>
-<h2>Images</h2>
-<p><img alt="Test Image" src="https://raw.githubusercontent.com/vrypan/fc-nmap/gh-frame/./images/test.png" />
-<img alt="External Image" src="https://example.com/image.png" /></p>
-<h2>Blockquotes</h2>
-<blockquote>
-<p>This is a blockquote</p>
-<p>With multiple lines</p>
-</blockquote>
-<h2>Inline Code</h2>
-<p>This is <code>inline code</code> in a sentence.</p>
-<h2>Syntax Highlighting</h2>
-<div class="codehilite"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">greeting</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Hello, World!&quot;</span><span class="p">;</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">greeting</span><span class="p">);</span>
-</code></pre></div>
-
-<h2>Footnotes</h2>
-<p>Here's a sentence with a footnote[^1].</p>
-<p>[^1]: This is the footnote content.</p>
+<p><code>fc-nmap</code> is distributed under the terms of the <a href="https://spdx.org/licenses/MIT.html">MIT</a> license.</p>
     
     <a href="https://github.com//" class="repo-button" target="_blank" rel="noopener noreferrer">
         View on GitHub
