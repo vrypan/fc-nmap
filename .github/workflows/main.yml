@@ -2,7 +2,15 @@ name: Deploy Farcaster-friendly Repo Page
 on:
   push:
     branches:
-      - main  # or 'master' or whatever your main branch is
+      - main
+    paths:
+      - "README.md"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "README.md"
+  workflow_dispatch:
 jobs:
   deploy:
     runs-on: ubuntu-latest
