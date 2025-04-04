@@ -3,16 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>fc-nmap</title>
-    <meta name="description" content="fc-nmap is a tool that scans the Farcaster network and collects hub information.">
-    <link rel="stylesheet" href="styles.css">
-    <meta property="og:title" content="fc-nmap">
-    <meta property="og:description" content="fc-nmap is a tool that scans the Farcaster network and collects hub information.">
-    <meta property="og:image" content="https://vrypan.github.io/fc-nmap/og-image.png">
-    <meta property="og:url" content="https://vrypan.github.io/fc-nmap">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://vrypan.github.io/fc-nmap/og-image.png">
-    <meta property="fc:frame" content='{"version":"next","imageUrl":"https://vrypan.github.io/fc-nmap/og-image.png","button":{"title":"Open repository","action":{"type":"launch_frame","url":"https://vrypan.github.io/fc-nmap","name":"fc-nmap","splashImageUrl":"https://vrypan.github.io/fc-nmap/splash-image.png","splashBackgroundColor":"#f5f0ec"}}}' />
+    <title></title>
+    <meta name="description" content="">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:title" content="">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="/">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="">
+    <meta property="twitter:title" content="">
+    <meta property="twitter:description" content="">
+    <meta property="twitter:image" content="/">
+    
+    <!-- Farcaster Frame -->
+    <meta property="fc:frame" content='{"version":"next","imageUrl":"/","button":{"title":"🚩 Start","action":{"type":"launch_frame","url":"","name":"","splashImageUrl":"/","splashBackgroundColor":"#f5f0ec"}}}' />
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #24292e;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            margin-top: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            line-height: 1.25;
+        }
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            padding: 0.2em 0.4em;
+            margin: 0;
+            font-size: 85%;
+            background-color: rgba(27,31,35,0.05);
+            border-radius: 3px;
+        }
+        pre {
+            padding: 16px;
+            overflow: auto;
+            font-size: 85%;
+            line-height: 1.45;
+            background-color: #f6f8fa;
+            border-radius: 3px;
+        }
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+            display: block;
+            width: 100%;
+            overflow: auto;
+        }
+        table th {
+            font-weight: 600;
+        }
+        table th, table td {
+            padding: 6px 13px;
+            border: 1px solid #dfe2e5;
+        }
+        table tr {
+            background-color: #fff;
+            border-top: 1px solid #c6cbd1;
+        }
+        table tr:nth-child(2n) {
+            background-color: #f6f8fa;
+        }
+        blockquote {
+            padding: 0 1em;
+            color: #6a737d;
+            border-left: 0.25em solid #dfe2e5;
+            margin: 0 0 16px 0;
+        }
+        img {
+            max-width: 100%;
+            box-sizing: content-box;
+        }
+        .task-list-item {
+            list-style-type: none;
+        }
+        .task-list-item-checkbox {
+            margin: 0 0.2em 0.25em -1.6em;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <h1>gh-frame</h1>
+<p>A GitHub Action that creates a Farcaster-friendly static page from your README.md with automatic frame support.</p>
+<h2>Features</h2>
+<ul>
+<li>Converts your README.md to a beautiful static page</li>
+<li>Automatically generates Open Graph images for social sharing</li>
+<li>Creates a Farcaster frame mini-app for your repository</li>
+<li>Supports custom domain names</li>
+<li>Rewrites relative image links to use raw.githubusercontent.com URLs</li>
+<li>Mobile-friendly design</li>
+<li>Dark mode support</li>
+</ul>
+<h2>Usage</h2>
+<ol>
+<li>Create a new workflow file in your repository at <code>.github/workflows/gh-frame.yml</code>:</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build Farcaster Page</span>
+<span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">push</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">workflow_dispatch</span><span class="p p-Indicator">]</span>
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">permissions</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
+<span class="w">      </span><span class="nt">pages</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
+<span class="w">      </span><span class="nt">id-token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vrypan/gh-frame@v1.1.10</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.GITHUB_TOKEN }}</span>
+</code></pre></div>
+
+<ol>
+<li>Go to your repository's Settings &gt; Pages and:</li>
+<li>Select the <code>gh-frame</code> branch as the source</li>
+<li>Click Save</li>
+</ol>
+<p>Your page will be available at:
+- <code>https://&lt;username&gt;.github.io/&lt;repository&gt;</code>
+- Or at your custom domain if configured</p>
+<h2>Frame Mini-App</h2>
+<p>The generated page includes a Farcaster frame mini-app that allows users to:
+- View your repository directly in Farcaster
+- Interact with links in your README
+- Share your repository in Farcaster feeds</p>
+<p>The frame includes:
+- A custom splash screen with your repository's image
+- A button to open the repository
+- Automatic link handling for external URLs</p>
+<h2>Customization</h2>
+<h3>Images</h3>
+<p>The action automatically generates two images:
+- <code>og-image.png</code>: Used for social sharing and the frame
+- <code>splash-image.png</code>: Used for the frame splash screen</p>
+<p>You can customize these images by:
+1. Creating a <code>generate-images.sh</code> script in your repository
+2. The script should generate both images in the current directory</p>
+<h3>Styling</h3>
+<p>The page uses a clean, modern design with:
+- Responsive layout
+- Dark mode support
+- GitHub-like styling
+- Custom fonts and colors</p>
+<h2>Development</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Install dependencies</span>
+npm<span class="w"> </span>install
+
+<span class="c1"># Build the action</span>
+npm<span class="w"> </span>run<span class="w"> </span>build
+
+<span class="c1"># Test locally</span>
+npm<span class="w"> </span><span class="nb">test</span>
+</code></pre></div>
+
+<h2>License</h2>
+<p>MIT</p>
+<h1>Test GFM Features</h1>
+<h2>Code Blocks</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">hello_world</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello, World!&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>Tables</h2>
+<p>| Feature | Support |
+|---------|---------|
+| Tables  | ✅      |
+| Code    | ✅      |
+| Lists   | ✅      |</p>
+<h2>Lists</h2>
+<ul>
+<li>Item 1</li>
+<li>Item 2</li>
+<li>Subitem 2.1</li>
+<li>
+<p>Subitem 2.2</p>
+</li>
+<li>
+<p>Numbered item 1</p>
+</li>
+<li>Numbered item 2</li>
+</ul>
+<h2>Task Lists</h2>
+<ul>
+<li>[x] Task 1</li>
+<li>[ ] Task 2</li>
+<li>[ ] Task 3</li>
+</ul>
+<h2>Strikethrough</h2>
+<p>~~This text is strikethrough~~</p>
+<h2>Emoji</h2>
+<p>:smile: :rocket: :tada:</p>
+<h2>Links</h2>
+<p><a href="https://github.com">GitHub</a></p>
+<h2>Images</h2>
+<p><img alt="Test Image" src="https://raw.githubusercontent.com/vrypan/fc-nmap/gh-frame/./images/test.png" />
+<img alt="External Image" src="https://example.com/image.png" /></p>
+<h2>Blockquotes</h2>
+<blockquote>
+<p>This is a blockquote</p>
+<p>With multiple lines</p>
+</blockquote>
+<h2>Inline Code</h2>
+<p>This is <code>inline code</code> in a sentence.</p>
+<h2>Syntax Highlighting</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">greeting</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Hello, World!&quot;</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">greeting</span><span class="p">);</span>
+</code></pre></div>
+
+<h2>Footnotes</h2>
+<p>Here's a sentence with a footnote[^1].</p>
+<p>[^1]: This is the footnote content.</p>
+    
+    <a href="https://github.com//" class="repo-button" target="_blank" rel="noopener noreferrer">
+        View on GitHub
+    </a>
+    <!-- Farcaster Frame SDK -->
     <script type="module">
         import { sdk } from 'https://esm.sh/@farcaster/frame-sdk'
         
@@ -37,57 +255,5 @@
             }
         });
     </script>
-</head>
-<body>
-    <div class="container">
-        <div class="content">
-            <h1>fc-nmap</h1>
-<p><strong>THis software is still in alpha and under heavy development.</strong> Things will change and break.</p>
-<p><a href="https://pypi.org/project/fc-nmap"><img src="https://img.shields.io/pypi/v/fc-nmap.svg" alt="PyPI - Version"></a>
-<a href="https://pypi.org/project/fc-nmap"><img src="https://img.shields.io/pypi/pyversions/fc-nmap.svg" alt="PyPI - Python Version"></a></p>
-<hr>
-<p><img src="https://raw.githubusercontent.com/vrypan/fc-nmap/main/map.png" alt="world map of hubs"></p>
-<h2>Quickstart</h2>
-<pre><code class="language-console">pip install fc-nmap
-
-fc-nmap --help
-
-Usage: fc-nmap [OPTIONS] COMMAND [ARGS]...
-
-  Farcaster Network Mapper
-
-Options:
-  --version   Show the version and exit.
-  -h, --help  Show this message and exit.
-
-Commands:
-  exportdb  Create a tab separated dump of the database
-  initdb    Initialize the database
-  scan      Scan will scan the network
-  updatedb  Collect addtional information about each hub
-  map       Create a mpa of the hubs in db
-</code></pre>
-<h2>Behind the scenes</h2>
-<p><code>fc-nmap initdb</code> creates a local sqlite database where data is stored.</p>
-<p><code>fc-nmap scan</code> will start by asking a hub to provide its contact list (gRPC call <code>GetCurrentPeers</code>). Using this list, it will pick <code>--hops</code>
-hubs at random, and request their contact list too. The lists are combined and stored in the database.</p>
-<p><code>fc-nmap updatedb --hub-info</code> looks into the database and picks hubs that were recently active.
-(Recency is defined by comparing <code>ContactInfoContentBody.timestamp</code> collected when requesting the contacts lists and the current timestamp.)
-The command will try to connect to each one of the hubs, and collect additional info using <code>GetInfo</code>, and store the results in the local
-database.</p>
-<p><code>fc-nmap updatedb --hub-location</code> works similar to <code>--hub-info</code>, but uses ip2location.io to get location information about each hub IP.
-Again, information collected is stored in the local database. The script will not query ip2location for IPs that were looked up in the last
-100 days. This helps staying within ip2location free plan limits.</p>
-<p><code>fc-nmap export --report=all</code> will export all &quot;active&quot; hubs. Use fc-nmap export --help` to get all the available exports/reports.
-Or connect directly to the local database (currently named hubs.db and stored in the directory where you called the previous commands)
-and run your own queries.</p>
-<h2>License</h2>
-<p><code>fc-nmap</code> is distributed under the terms of the <a href="https://spdx.org/licenses/MIT.html">MIT</a> license.</p>
-
-        </div>
-        <div class="footer">
-            <a href="https://github.com/vrypan/fc-nmap" class="github-button">View on Github</a>
-        </div>
-    </div>
 </body>
 </html> 
