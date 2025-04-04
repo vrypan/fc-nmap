@@ -1,101 +1,112 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <meta name="description" content="">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="">
-    <meta property="og:title" content="">
-    <meta property="og:description" content="">
-    <meta property="og:image" content="/">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="">
-    <meta property="twitter:title" content="">
-    <meta property="twitter:description" content="">
-    <meta property="twitter:image" content="/">
-    
-    <!-- Farcaster Frame -->
-    <meta property="fc:frame" content='{"version":"next","imageUrl":"/","button":{"title":"🚩 Start","action":{"type":"launch_frame","url":"","name":"","splashImageUrl":"/","splashBackgroundColor":"#f5f0ec"}}}' />
-    
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            color: #24292e;
-        }
-        h1, h2, h3, h4, h5, h6 {
-            margin-top: 24px;
-            margin-bottom: 16px;
-            font-weight: 600;
-            line-height: 1.25;
-        }
-        code {
-            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-            padding: 0.2em 0.4em;
-            margin: 0;
-            font-size: 85%;
-            background-color: rgba(27,31,35,0.05);
-            border-radius: 3px;
-        }
-        pre {
-            padding: 16px;
-            overflow: auto;
-            font-size: 85%;
-            line-height: 1.45;
-            background-color: #f6f8fa;
-            border-radius: 3px;
-        }
-        table {
-            border-spacing: 0;
-            border-collapse: collapse;
-            display: block;
-            width: 100%;
-            overflow: auto;
-        }
-        table th {
-            font-weight: 600;
-        }
-        table th, table td {
-            padding: 6px 13px;
-            border: 1px solid #dfe2e5;
-        }
-        table tr {
-            background-color: #fff;
-            border-top: 1px solid #c6cbd1;
-        }
-        table tr:nth-child(2n) {
-            background-color: #f6f8fa;
-        }
-        blockquote {
-            padding: 0 1em;
-            color: #6a737d;
-            border-left: 0.25em solid #dfe2e5;
-            margin: 0 0 16px 0;
-        }
-        img {
-            max-width: 100%;
-            box-sizing: content-box;
-        }
-        .task-list-item {
-            list-style-type: none;
-        }
-        .task-list-item-checkbox {
-            margin: 0 0.2em 0.25em -1.6em;
-            vertical-align: middle;
-        }
-    </style>
-</head>
-<body>
-    <h1>fc-nmap</h1>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Fc Nmap</title>
+        <meta name="description" content="fc-nmap is a tool that scans the Farcaster network and collects hub information." />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://vrypan.github.io/fc-nmap" />
+        <meta property="og:title" content="Fc Nmap" />
+        <meta property="og:description" content="fc-nmap is a tool that scans the Farcaster network and collects hub information." />
+        <meta property="og:image" content="https://vrypan.github.io/fc-nmap/og-image.png" />
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://vrypan.github.io/fc-nmap" />
+        <meta property="twitter:title" content="Fc Nmap" />
+        <meta property="twitter:description" content="fc-nmap is a tool that scans the Farcaster network and collects hub information." />
+        <meta property="twitter:image" content="https://vrypan.github.io/fc-nmap/og-image.png" />
+
+        <!-- Farcaster Frame -->
+        <meta
+            property="fc:frame"
+            content='{"version":"next","imageUrl":"https://vrypan.github.io/fc-nmap/og-image.png","button":{"title":"View Repository","action":{"type":"launch_frame","url":"https://vrypan.github.io/fc-nmap","name":"Fc Nmap","splashImageUrl":"https://vrypan.github.io/fc-nmap/og-image.png","splashBackgroundColor":"#f5f0ec"}}}'
+        />
+
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                    Roboto, Helvetica, Arial, sans-serif;
+                line-height: 1.6;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                color: #24292e;
+            }
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                margin-top: 24px;
+                margin-bottom: 16px;
+                font-weight: 600;
+                line-height: 1.25;
+            }
+            code {
+                font-family: "SFMono-Regular", Consolas, "Liberation Mono",
+                    Menlo, monospace;
+                padding: 0.2em 0.4em;
+                margin: 0;
+                font-size: 85%;
+                background-color: rgba(27, 31, 35, 0.05);
+                border-radius: 3px;
+            }
+            pre {
+                padding: 16px;
+                overflow: auto;
+                font-size: 85%;
+                line-height: 1.45;
+                background-color: #f6f8fa;
+                border-radius: 3px;
+            }
+            table {
+                border-spacing: 0;
+                border-collapse: collapse;
+                display: block;
+                width: 100%;
+                overflow: auto;
+            }
+            table th {
+                font-weight: 600;
+            }
+            table th,
+            table td {
+                padding: 6px 13px;
+                border: 1px solid #dfe2e5;
+            }
+            table tr {
+                background-color: #fff;
+                border-top: 1px solid #c6cbd1;
+            }
+            table tr:nth-child(2n) {
+                background-color: #f6f8fa;
+            }
+            blockquote {
+                padding: 0 1em;
+                color: #6a737d;
+                border-left: 0.25em solid #dfe2e5;
+                margin: 0 0 16px 0;
+            }
+            img {
+                max-width: 100%;
+                box-sizing: content-box;
+            }
+            .task-list-item {
+                list-style-type: none;
+            }
+            .task-list-item-checkbox {
+                margin: 0 0.2em 0.25em -1.6em;
+                vertical-align: middle;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>fc-nmap</h1>
 <p><strong>THis software is still in alpha and under heavy development.</strong> Things will change and break.</p>
 <p><a href="https://pypi.org/project/fc-nmap"><img alt="PyPI - Version" src="https://img.shields.io/pypi/v/fc-nmap.svg" /></a>
 <a href="https://pypi.org/project/fc-nmap"><img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/fc-nmap.svg" /></a></p>
@@ -138,34 +149,39 @@ Or connect directly to the local database (currently named hubs.db and stored in
 and run your own queries.</p>
 <h2>License</h2>
 <p><code>fc-nmap</code> is distributed under the terms of the <a href="https://spdx.org/licenses/MIT.html">MIT</a> license.</p>
-    
-    <a href="https://github.com//" class="repo-button" target="_blank" rel="noopener noreferrer">
-        View on GitHub
-    </a>
-    <!-- Farcaster Frame SDK -->
-    <script type="module">
-        import { sdk } from 'https://esm.sh/@farcaster/frame-sdk'
-        
-        // Call ready when the page is loaded
-        async function rewriteLinks() {
-            const links = document.querySelectorAll("a[href^='http']");
-            for (let link of links) {
-                link.addEventListener("click", (event) => {
-                    event.preventDefault();
-                    sdk.actions.openUrl(link.getAttribute("href"));
-                });
+
+        <a
+            href="https://github.com/vrypan/fc-nmap"
+            class="repo-button"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            View on GitHub
+        </a>
+        <!-- Farcaster Frame SDK -->
+        <script type="module">
+            import { sdk } from "https://esm.sh/@farcaster/frame-sdk";
+
+            // Call ready when the page is loaded
+            async function rewriteLinks() {
+                const links = document.querySelectorAll("a[href^='http']");
+                for (let link of links) {
+                    link.addEventListener("click", (event) => {
+                        event.preventDefault();
+                        sdk.actions.openUrl(link.getAttribute("href"));
+                    });
+                }
             }
-        }
-        window.addEventListener('load', async () => {
-            try {
-                await sdk.actions.ready();
-                console.log('Frame is ready');
-                const ctx = await sdk.context;
-                ctx ? await rewriteLinks() : null;
-            } catch (e) {
-                console.error('Failed to initialize frame:', e);
-            }
-        });
-    </script>
-</body>
-</html> 
+            window.addEventListener("load", async () => {
+                try {
+                    await sdk.actions.ready();
+                    console.log("Frame is ready");
+                    const ctx = await sdk.context;
+                    ctx ? await rewriteLinks() : null;
+                } catch (e) {
+                    console.error("Failed to initialize frame:", e);
+                }
+            });
+        </script>
+    </body>
+</html>
