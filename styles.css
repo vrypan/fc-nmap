@@ -1,15 +1,15 @@
 :root {
-    --primary-color: #58a6ff;
-    --text-color: #c9d1d9;
-    --background-color: #0d1117;
-    --border-color: #30363d;
-    --code-bg-color: rgba(110, 118, 129, 0.4);
-    --pre-bg-color: #161b22;
-    --blockquote-color: #8b949e;
-    --blockquote-border: #30363d;
-    --footer-color: #8b949e;
-    --github-button-bg: #21262d;
-    --github-button-hover: #30363d;
+    --primary-color: #0366d6;
+    --text-color: #24292e;
+    --background-color: #ffffff;
+    --border-color: #e1e4e8;
+    --code-bg-color: rgba(27, 31, 35, 0.05);
+    --pre-bg-color: #f6f8fa;
+    --blockquote-color: #6a737d;
+    --blockquote-border: #dfe2e5;
+    --footer-color: #6a737d;
+    --github-button-bg: #24292e;
+    --github-button-hover: #1a1f23;
 }
 
 body {
@@ -154,7 +154,7 @@ footer {
         margin: 0 0 1rem 0;
     }
 
-    .mobile-top .github-button {
+    .github-button {
         width: 90%;
         justify-content: center;
         border-radius: 6px;
@@ -166,4 +166,4 @@ footer {
     .mobile-top {
         display: none;
     }
-} 
+}
