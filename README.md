@@ -1,6 +1,6 @@
 # fc-nmap
 
-**THis software is still in alpha and under heavy development.** Things will change and break.
+**This software is still in alpha and under heavy development.** Things will change and break.
 
 [![PyPI - Version](https://img.shields.io/pypi/v/fc-nmap.svg)](https://pypi.org/project/fc-nmap)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/fc-nmap.svg)](https://pypi.org/project/fc-nmap)
