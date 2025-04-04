@@ -19,6 +19,9 @@ body {
     margin: 0 auto;
     padding: 0.5rem;
 }
+img {
+    max-width: 780px;
+}
 
 main {
     background-color: var(--background-color);
