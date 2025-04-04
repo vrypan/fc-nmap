@@ -14,10 +14,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Generate Farcaster-friendly Page
-        uses: vrypan/gh-frame@v2.0.0-pre14
+        uses: vrypan/gh-frame@v2.0.0-pre15
         with:
           token: ${{ secrets.GITHUB_TOKEN }}  # Default GitHub token
-          style: light  # or dark/custom
+          style: dark  # or dark/custom
           # Optionally set cname or branch_name if you want:
           # cname: yourdomain.com
           # branch_name: gh-pages
