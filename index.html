@@ -12,10 +12,7 @@
     <meta property="og:url" content="https://vrypan.github.io/fc-nmap">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://vrypan.github.io/fc-nmap/og-image.png">
-    <meta property="fc:frame" content="vNext">
-    <meta property="fc:frame:image" content="https://vrypan.github.io/fc-nmap/og-image.png">
-    <meta property="fc:frame:button:1" content="View on Github">
-    <meta property="fc:frame:post_url" content="https://vrypan.github.io/fc-nmap">
+    <meta property="fc:frame" content='{"version":"next","imageUrl":"https://vrypan.github.io/fc-nmap/og-image.png","button":{"title":"Open repository","action":{"type":"launch_frame","url":"https://vrypan.github.io/fc-nmap","name":"fc-nmap","splashImageUrl":"https://vrypan.github.io/fc-nmap/splash-image.png","splashBackgroundColor":"#f5f0ec"}}}' />
     <script type="module">
         import { sdk } from 'https://esm.sh/@farcaster/frame-sdk'
         
@@ -35,7 +32,6 @@
                 console.log('Frame is ready');
                 const ctx = await frame.sdk.context;
                 ctx ? await rewriteLinks() : null;
-                
             } catch (e) {
                 console.error('Failed to initialize frame:', e);
             }
