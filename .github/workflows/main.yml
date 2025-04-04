@@ -1,14 +1,14 @@
-name: Build Farcaster Page
-on: [push, workflow_dispatch]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: vrypan/gh-frame@v2.0.0-pre13
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+name: Farcaster-friendly Repo Page
+  # You may pin to the exact commit or the version.
+  # uses: vrypan/gh-frame@f02762c49e182b91a32fe6affa168770920b7d5d
+  uses: vrypan/gh-frame@v2.0.0-pre14
+  with:
+    # GitHub token for authentication
+    token: # optional, default is ${{ github.token }}
+    # Custom domain for GitHub Pages
+    cname: # optional
+    # Branch name for GitHub Pages
+    branch_name: # optional, default is gh-frame
+    # CSS style use to render the page: light/dark/custom
+    style: # optional, default is light
+          
